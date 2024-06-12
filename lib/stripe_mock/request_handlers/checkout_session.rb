@@ -18,9 +18,12 @@ module StripeMock
           line_items = nil
           if params[:line_items]
             line_items = params[:line_items].each_with_index.map do |line_item, i|
-              throw Stripe::InvalidRequestError("Quantity is required. Add `quantity` to `line_items[#{i}]`") unless line_item[:quantity]
+              raise Stripe::InvalidRequestError.new("Quantity is required. Add `quantity` to `line_items[#{i}]`", "quantity") unless line_item[:quantity]
               unless line_item[:price] || line_item[:price_data] || (line_item[:amount] && line_item[:currency] && line_item[:name])
-                throw Stripe::InvalidRequestError("Price or amount and currency is required. Add `price`, `price_data`, or `amount`, `currency` and `name` to `line_items[#{i}]`")
+                raise Stripe::InvalidRequestError.new(
+                  "Price or amount and currency is required. Add `price`, `price_data`, or `amount`, `currency` and `name` to `line_items[#{i}]`",
+                  "price"
+                )
               end
               {
                 id: new_id("li"),
