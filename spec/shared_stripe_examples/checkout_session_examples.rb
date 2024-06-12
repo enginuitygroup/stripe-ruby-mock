@@ -49,6 +49,14 @@ shared_examples "Checkout Session API" do
     expect(setup_intent.payment_method_types).to eq(["card"])
   end
 
+  it "requires a success_url" do
+    expect do
+      session = Stripe::Checkout::Session.create(
+        mode: "setup"
+      )
+    end.to raise_error(Stripe::InvalidRequestError, /success_url/i)
+  end
+
   context "when creating a subscription" do
     it "requires line_items" do
       expect do
@@ -61,6 +69,16 @@ shared_examples "Checkout Session API" do
         )
       end.to raise_error(Stripe::InvalidRequestError, /line_items/i)
 
+    end
+  end
+
+  context "when using embedded ui_mode" do
+    it "requires a return_url" do
+      expect do
+        session = Stripe::Checkout::Session.create(
+          ui_mode: 'embedded'
+        )
+      end.to raise_error(Stripe::InvalidRequestError, /return_url/i)
     end
   end
 
