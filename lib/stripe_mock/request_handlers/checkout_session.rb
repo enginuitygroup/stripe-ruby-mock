@@ -124,6 +124,7 @@ module StripeMock
             setup_intent: setup_intent,
             shipping: nil,
             shipping_address_collection: nil,
+            status: "open",
             submit_type: nil,
             subscription: nil,
             success_url: params[:success_url],

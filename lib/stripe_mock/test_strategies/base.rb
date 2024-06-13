@@ -147,6 +147,11 @@ module StripeMock
             default_payment_method: payment_method.id
           })
         end
+
+        StripeMock.instance.checkout_sessions[session.id].merge!(
+          status:         "complete",
+          payment_status: "paid"
+        )
       end
 
       def create_coupon(params = {})
